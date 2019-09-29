@@ -1,4 +1,4 @@
-package com.system.design.systemdesign.array;
+package com.system.design.ds.array;
 
 import java.util.LinkedList;
 import java.util.Queue;

@@ -1,4 +1,4 @@
-package com.system.design.systemdesign.dp;
+package com.system.design.ds.dp;
 
 public class RodCutting {
     public static void main(String[] args) {

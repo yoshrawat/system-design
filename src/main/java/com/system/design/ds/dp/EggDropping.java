@@ -1,4 +1,4 @@
-package com.system.design.systemdesign.dp;
+package com.system.design.ds.dp;
 
 public class EggDropping {
     public static void main(String[] args) {

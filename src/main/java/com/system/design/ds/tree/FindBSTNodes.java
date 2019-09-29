@@ -1,4 +1,4 @@
-package com.system.design.systemdesign.tree;
+package com.system.design.ds.tree;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

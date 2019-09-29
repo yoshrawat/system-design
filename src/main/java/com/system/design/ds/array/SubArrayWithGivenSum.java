@@ -1,4 +1,4 @@
-package com.system.design.systemdesign.array;
+package com.system.design.ds.array;
 
 public class SubArrayWithGivenSum {
     public static void main(String[] args) {
