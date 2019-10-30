@@ -1,7 +1,7 @@
-package com.system.design.systemdesign.chessv1;
+package com.system.design.edu.chessv1;
 
-public class Rook extends Piece {
-    public Rook(boolean white) {
+public class Pawn extends Piece {
+    public Pawn(boolean white) {
         super(white);
     }
 

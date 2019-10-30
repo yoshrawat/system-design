@@ -1,4 +1,4 @@
-package com.system.design.systemdesign.chessv1;
+package com.system.design.edu.chessv1;
 
 import lombok.Getter;
 import lombok.Setter;
