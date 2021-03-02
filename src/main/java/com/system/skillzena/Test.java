@@ -1,66 +1,80 @@
 package com.system.skillzena;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-
+import java.util.*;
 public class Test {
+
     public static void main(String[] args) {
-        int[][] clips= {{0,2},{4,6},{8,10},{1,9},{1,5},{5,9}};
-//        System.out.println(videoStitching(clips,10));
-//        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        System.out.println(allSubstrings("cab",new char[]{'a','c'}));
-    }
-    public static int allSubstrings(String s, char[] alphabets) {
-        int total = alphabets.length;
-        Map<Character,Integer> map = new HashMap<>();
-        int res = 0, start = 0;
-        for(char c : alphabets) {
-            map.put(c, map.getOrDefault(c,0)+1);
-        }
-        for(int i = 0; i < s.length(); i++) {
-            if( map.containsKey(s.charAt(i)) && map.get(s.charAt(i)) > 0 ){
-                map.put(s.charAt(i), map.get(s.charAt(i))-1);
-                total--;
-            }
-            while(total == 0) {
-                if( map.containsKey(s.charAt(start)))
-                    map.put(s.charAt(start), map.get(s.charAt(start))+1);
-                if( map.containsKey(s.charAt(start)) && map.get(s.charAt(start)) > 0 )
-                    total++;
-                start++;
-            }
-            res += i-start+1;
-        }
-        return res;
-    }
-    public static int videoStitching(int[][] clips, int T) {
+        Scanner sc = new Scanner(System.in);
+        int test = Integer.parseInt(sc.nextLine());
+        for( int i =0; i < test;i++) {
+            String[] str = sc.nextLine().split(" ");
+            int n =   Integer.parseInt(str[0]);
+            int k =   Integer.parseInt(str[1]);
+            int p =   Integer.parseInt(str[2]);
 
-        Arrays.sort( clips, (a, b) -> a[0] - b[0]);
+            int[][] arr = new int[n][k];
 
+            for( int j =0; j < n; j++ ) {
+                String[] str1 = sc.nextLine().split(" ");
+                for( int l =0; l < str1.length; l++ ) {
+                    arr[j][l] = Integer.parseInt(str1[l].trim());
+                }
+            }
+            int result = helper(arr, n, k, p);
+            System.out.println("Case #"+(i+1) +": "+ result);
+        }
+    }
+
+
+
+    private static int helper(int[][] arr, int n, int k, int p) {
+        int[][] preSum =  new int[n][k];
+        for( int i =0; i < n; i++ ) {
+            preSum[i][0] = arr[i][0];
+        }
+        for( int i =0; i < n; i++ ) {
+            for( int j =1; j < k; j++ ) {
+                preSum[i][j] = arr[i][j] + preSum[i][j-1];
+            }
+        }
+        for( int[] a : preSum) {
+            System.out.println(Arrays.toString(a));
+        }
+        // row, col, cost, coumt
+        PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> {
+            if(a[2] == b[2])
+                return a[3] - b[3];
+            return a[2] - b[2];
+        });
+
+        PriorityQueue<int[]> result = new PriorityQueue<>((a, b) -> {
+                return a[3] - b[3];
+        });
+
+        for( int i =0; i < preSum.length; i++ ) {
+            for( int j =0; j < preSum[0].length; j++ ) {
+                pq.add(new int[]{i, j, (int) preSum[i][j], j+1});
+            }
+        }
+        int max = Integer.MIN_VALUE;
         int count = 0;
-        int curend = 0;
-        int laststart = -1;
-
-        for(int i = 0; i < clips.length; ) {
-            if(clips[i][0] > curend) {
-                return -1;
+        int cost = 0;
+        while (!pq.isEmpty()) {
+            int[] temp = pq.poll();
+            cost += temp[2];
+            count =+ temp[3];
+            result.add(temp);
+            if( count > k ) {
+                while ( !result.isEmpty() && count > k ) {
+                    int[] temp2 = result.poll();
+                    cost -= temp2[2];
+                    count -= temp2[3];
+                }
             }
-            int maxend = curend;
-            while(i < clips.length && clips[i][0] <= curend) { // while one clip's start is before or equal to current end
-                maxend = Math.max(maxend, clips[i][1]); // find out the one with the max possible end
-                i++;
-                System.out.println("maxend::"+ maxend);
-            }
-            count++;
-            System.out.println("count::"+ count);
-            curend = maxend;
-            if(curend >= T) {
-                return count;
+            if( count == k ) {
+                max = Math.max( max, cost);
             }
         }
-        return -1;
+        return max;
     }
 }
